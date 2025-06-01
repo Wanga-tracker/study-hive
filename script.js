@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'http
 import { doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/11.8.2/firebase-firestore.js';
 
 // Admin verification password (replace with your secure password)
-const ADMIN_VERIFICATION_PASSWORD = 'your-secret-admin-password';
+const ADMIN_VERIFICATION_PASSWORD = 'wanga@2006';
 
 // Signup function
 export async function signUpUser({ name, username, email, phone, county, school, level, password, referral, adminRequest, adminPassword }, errorCallback) {
