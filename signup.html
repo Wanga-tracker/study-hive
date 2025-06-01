@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edu sync hub Africa - Signup</title>
+  <style>
+    body {
+      background: #1A1A2E;
+      color: #FFFFFF;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .auth-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 25px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 221, 235, 0.5);
+    }
+    h2 {
+      text-align: center;
+      background: linear-gradient(45deg, #FF007A, #00DDEB);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input, select {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #00DDEB;
+      background: #1A1A2E;
+      color: #FFFFFF;
+      border-radius: 8px;
+    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    button {
+      background: linear-gradient(45deg, #FF007A, #00DDEB);
+      border: none;
+      padding: 12px;
+      color: #FFFFFF;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    .error {
+      color: #FF007A;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Sign Up</h2>
+    <form id="signup-form">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+      <input type="text" id="county" placeholder="County" required>
+      <input type="text" id="school" placeholder="School Name" required>
+      <select id="level" required>
+        <option value="" disabled selected>Select Grade Level</option>
+        <option value="primary">Primary</option>
+        <option value="junior_high">Junior High</option>
+        <option value="secondary">Secondary</option>
+      </select>
+      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="referral" placeholder="Referral Code (optional)">
+      <div class="checkbox-container">
+        <input type="checkbox" id="admin-request">
+        <label for="admin-request">Request Admin Role (pending approval)</label>
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
+    <div id="error-message" class="error"></div>
+  </div>
+  <script type="module">
+    import { signUpUser } from './script.js';
+
+    const form = document.getElementById('signup-form');
+    const errorMessage = document.getElementById('error-message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userData = {
+        name: form.name.value.trim(),
+        username: form.username.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        county: form.county.value.trim(),
+        school: form.school.value.trim(),
+        level: form.level.value,
+        password: form.password.value,
+        referral: form.referral.value.trim(),
+        adminRequest: form['admin-request'].checked
+      };
+
+      await signUpUser(userData, (error) => {
+        errorMessage.textContent = error;
+      });
+    });
+  </script>
+</body>
+</html>
