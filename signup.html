@@ -145,7 +145,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyCs6rzjsYBPYmT1vK3VWQRU36MJgQmKJq0",
       authDomain: "edu-hub-kenya.firebaseapp.com",
-      databaseURL: "", // Paste Realtime Database URL here if needed
+      databaseURL: "https://edu-hub-kenya-default-rtdb.firebaseio.com", // Added Realtime Database URL
       projectId: "edu-hub-kenya",
       storageBucket: "edu-hub-kenya.firebasestorage.app",
       messagingSenderId: "163804145504",
@@ -154,9 +154,15 @@
     };
 
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    let app, auth, db;
+    try {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      console.log("Firebase initialized successfully");
+    } catch (error) {
+      console.error("Firebase initialization error:", error);
+    }
 
     // Admin verification password
     const ADMIN_VERIFICATION_PASSWORD = 'EduAdmin2025!'; // TODO: Replace with your secure password
@@ -179,7 +185,7 @@
         email: form.email.value.trim(),
         phone: form.phone.value.trim(),
         county: form.county.value.trim(),
-        school: form.email.value.trim(),
+        school: form.school.value.trim(),
         level: form.level.value,
         password: form.password.value,
         referral: form.referral.value.trim(),
@@ -187,44 +193,48 @@
         adminPassword: form['admin-password'].value.trim()
       };
 
-    if (!userData.name || !userData.username || !userData.email || !userData.phone || !userData.county || !userData.school || !userData.level) {
+      if (!userData.name || !userData.username || !userData.email || !userData.phone || !userData.county || !userData.school || !userData.level) {
         errorMessage.textContent = 'All required fields must be filled.';
         return;
       }
 
-    if (userData.password.length < 6) {
-      errorMessage.textContent = 'Password must be at least 6 characters';
+      if (userData.password.length < 6) {
+        errorMessage.textContent = 'Password must be at least 6 characters.';
         return;
       }
 
-    if (userData.adminRequest && !userData.adminPassword) {
-        errorMessage.textContent = 'Admin verification password is required';
+      if (userData.adminRequest && !userData.adminPassword) {
+        errorMessage.textContent = 'Admin verification password is required.';
         return;
       }
 
       try {
         // Check username uniqueness
+        console.log("Checking username uniqueness...");
         const usernameQuery = query(collection(db, 'users'), where('username', '==', userData.username));
         const usernameSnapshot = await getDocs(usernameQuery);
-        if (!usernameSnapshot.empty()) {
-          errorMessage.textContent = 'Username already exists';
+        if (!usernameSnapshot.empty) {
+          errorMessage.textContent = 'Username already exists.';
           return;
         }
 
         // Verify admin password
         if (userData.adminRequest && userData.adminPassword !== ADMIN_VERIFICATION_PASSWORD) {
-          errorMessage.textContent = 'Invalid admin password';
+          errorMessage.textContent = 'Invalid admin verification password.';
           return;
         }
 
         // Create user
+        console.log("Creating user with email:", userData.email);
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
         const user = userCredential.user;
+        console.log("User created:", user.uid);
 
         // Set role
         const role = userData.adminRequest && userData.adminPassword === ADMIN_VERIFICATION_PASSWORD ? 'admin' : 'student';
 
         // Save user data
+        console.log("Saving user data to Firestore...");
         await setDoc(doc(db, 'users', user.uid), {
           name: userData.name,
           username: userData.username,
@@ -237,12 +247,14 @@
           referral: userData.referral || '',
           createdAt: new Date()
         });
+        console.log("User data saved successfully");
 
         // Redirect
+        console.log("Redirecting to:", role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
         window.location.href = role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html';
       } catch (error) {
-        console.error('Signup error:', error);
-        errorMessage.textContent = error.message;
+        console.error("Signup error:", error);
+        errorMessage.textContent = error.message || 'An error occurred during signup.';
       }
     });
   </script>
