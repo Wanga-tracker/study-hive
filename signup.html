@@ -3,126 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edu Sync Hub - Signup</title>
+  <title>Signup | Tracker Portal</title>
   <style>
     body {
-      background: linear-gradient(135deg, #6b48ff, #00ddeb);
       font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928DAB);
+      color: #fff;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      justify-content: center;
+      height: 100vh;
       margin: 0;
     }
     .container {
-      background: #fff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 30px;
       border-radius: 12px;
-      padding: 25px;
-      width: 100%;
+      box-shadow: 0 0 15px #444;
+      width: 90%;
       max-width: 400px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
     }
     h2 {
       text-align: center;
-      color: #6b48ff;
+      margin-bottom: 20px;
+      color: #81ecec;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
     }
     input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      background: #fff;
+      color: #333;
     }
-    .glow-button {
-      background: #6b48ff;
+    button {
+      background-color: #6c5ce7;
       color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      width: 100%;
       cursor: pointer;
-      transition: 0.3s;
-      margin-top: 10px;
     }
-    .glow-button:hover {
-      box-shadow: 0 0 12px #00ddeb;
+    button:hover {
+      background-color: #341f97;
     }
-    .switch {
+    #error-message {
+      color: #ff7675;
       text-align: center;
       margin-top: 10px;
-    }
-    .switch a {
-      color: #6b48ff;
-      text-decoration: none;
     }
   </style>
 </head>
 <body>
+
   <div class="container">
     <h2>Create Account</h2>
-    <form id="signup-form">
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="tel" id="phone" placeholder="Phone Number" required>
-      <input type="text" id="school" placeholder="school" required>
-      <input type="text" id="county" placeholder="County" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <input type="text" id="referral" placeholder="Referral Code (optional)">
-      <button type="submit" class="glow-button">Sign Up</button>
-    </form>
-    <div class="switch">
-      Already have an account? <a href="login.html">Log In</a>
-    </div>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <input type="text" id="admin-password" placeholder="Admin Password (optional)" />
+    <button onclick="signup()">Sign Up</button>
+    <p id="error-message"></p>
   </div>
 
   <!-- Firebase SDKs -->
-  <script type="module">
-    // Firebase import and config
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
 
+  <script>
+    // 🛠 Replace with your Firebase config
     const firebaseConfig = {
-      apiKey: "AIzaSyAcqZKghgyzk1ghfP-l8dwlHOVRNeG1TAk",
-      authDomain: "edu-sync-hub-africa.firebaseapp.com",
-      projectId: "edu-sync-hub-africa",
-      storageBucket: "edu-sync-hub-africa.appspot.com",
-      messagingSenderId: "625120725619",
-      appId: "1:625120725619:web:0a373d5201cd9a87333806"
+      apiKey: "AIzaSyAjsxzqXwW2PcwowbFSb4jiGTHGv9rdL0w",
+      authDomain: "edu-hub-kenya.firebaseapp.com",
+      projectId: "agent-hive-project",
+      storageBucket: "agent-hive-project.appspot.com",
+      messagingSenderId: "464476218600",
+      appId: "1:464476218600:web:59aa5ba90c73468d78155d"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    const form = document.getElementById("signup-form");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = form.email.value;
-      const password = form.password.value;
+    const ADMIN_VERIFICATION_PASSWORD = "Secret2025";
+
+    async function signup() {
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const adminPassword = document.getElementById("admin-password").value.trim();
+      const errorMessage = document.getElementById("error-message");
+
+      errorMessage.textContent = "";
+
+      if (!username || !email || !password) {
+        errorMessage.textContent = "Please fill in all required fields.";
+        return;
+      }
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        // Check if username exists
+        const userRef = db.collection("users");
+        const snapshot = await userRef.where("username", "==", username).get();
+        if (!snapshot.empty) {
+          errorMessage.textContent = "Username already taken.";
+          return;
+        }
 
-        await setDoc(doc(db, "users", user.uid), {
-          name: form.name.value,
-          username: form.username.value,
-          email: email,
-          phone: form.phone.value,
-          country: form.country.value,
-          county: form.county.value,
-          referral: form.referral.value,
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const uid = userCredential.user.uid;
+        const role = adminPassword === ADMIN_VERIFICATION_PASSWORD ? "admin" : "student";
+
+        await db.collection("users").doc(uid).set({
+          username,
+          email,
+          role,
           createdAt: new Date()
         });
 
         alert("Signup successful!");
-        window.location.href = "pages/sorting-dashboard.html";
-      } catch (err) {
-        alert("Signup failed: " + err.message);
+        window.location.href = "dashboard.html"; // or wherever you want to redirect
+      } catch (error) {
+        console.error("Signup error:", error);
+        errorMessage.textContent = error.message;
       }
-    });
+    }
   </script>
 </body>
-</html>
+      </html>
