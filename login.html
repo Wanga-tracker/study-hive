@@ -3,15 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edu Sync Hub Africa - Login</title>
+  <title>EduHub Kenya - Login</title>
+  <style>
+    body {
+      background: #0D0D1F;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #1A1A3D;
+      border-radius: 12px;
+      padding: 25px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    h2 {
+      text-align: center;
+      color: #39FF14;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #39FF14;
+      background: #0D0D1F;
+      color: #FFFFFF;
+    }
+    .glow-button {
+      background: linear-gradient(45deg, #39FF14, #D600F0);
+      color: #FFFFFF;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 12px #D600F0;
+    }
+    .switch {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .switch a {
+      color: #39FF14;
+      text-decoration: none;
+    }
+    .error {
+      color: #D600F0;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <div class="auth-container">
+  <div class="container">
     <h2>Log In</h2>
     <form id="login-form">
       <input type="email" id="email" placeholder="Email" required>
       <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Sign In</button>
+      <button type="submit" class="glow-button">Log In</button>
     </form>
     <div class="switch">
       Don’t have an account? <a href="signup.html">Sign Up</a>
@@ -19,140 +77,42 @@
     <div id="error-message" class="error"></div>
   </div>
 
-  <style>
-    body {
-      background: #1A1A2E;
-      color: #FFFFFF;
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .auth-container {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 30px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 0 20px rgba(0, 221, 235, 0.5);
-      backdrop-filter: blur(5px);
-    }
-    h2 {
-      text-align: center;
-      background: linear-gradient(45deg, #FF007A, #00DDEB);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 2em;
-      margin-bottom: 20px;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    input {
-      margin: 10px 0;
-      padding: 12px;
-      border: 1px solid #00DDEB;
-      background: #1A1A2E;
-      color: #FFFFFF;
-      border-radius: 8px;
-      font-size: 1em;
-    }
-    button {
-      background: linear-gradient(45deg, #FF007A, #00DDEB);
-      border: none;
-      padding: 15px;
-      color: #FFFFFF;
-      cursor: pointer;
-      border-radius: 8px;
-      font-size: 1.1em;
-    }
-    button:hover {
-      box-shadow: 0 0 12px #00DDEB;
-    }
-    .error {
-      color: #FF007A;
-      text-align: center;
-      margin-top: 10px;
-      font-size: 0.9em;
-    }
-    .switch {
-      text-align: center;
-      margin-top: 15px;
-    }
-    .switch a {
-      color: #00DDEB;
-      text-decoration: none;
-    }
-  </style>
-
   <script type="module">
-    // Firebase SDK
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js';
-    import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCs6rzjsYBPYmT1vK3VWQRU36MJgQmKJq0",
       authDomain: "edu-hub-kenya.firebaseapp.com",
-      databaseURL: "https://edu-hub-kenya-default-rtdb.firebaseio.com", // Added Realtime Database URL
       projectId: "edu-hub-kenya",
-      storageBucket: "edu-hub-kenya.firebasestorage.app",
+      storageBucket: "edu-hub-kenya.appspot.com",
       messagingSenderId: "163804145504",
-      appId: "1:163804145504:web:9b989b384a2bd2643f6005",
-      measurementId: "G-C8YB09R7J5"
+      appId: "1:163804145504:web:9b989b384a2bd2643f6005"
     };
 
-    // Initialize Firebase
-    let app, auth, db;
-    try {
-      app = initializeApp(firebaseConfig);
-      auth = getAuth(app);
-      db = getFirestore(app);
-      console.log("Firebase initialized successfully");
-    } catch (error) {
-      console.error("Firebase initialization error:", error);
-    }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Login logic
-    const form = document.getElementById('login-form');
+    const form = document.getElementById("login-form");
     const errorMessage = document.getElementById('error-message');
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = form.email.value.trim();
+      const email = form.email.value;
       const password = form.password.value;
 
-      if (!email || !password) {
-        errorMessage.textContent = 'Email and password are required.';
-        return;
-      }
-
       try {
-        console.log("Attempting login for email:", email);
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        console.log("User logged in:", user.uid);
-
-        console.log("Fetching user data from Firestore...");
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          const role = userDoc.data().role;
-          console.log("User role:", role);
-          console.log("Redirecting to:", role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
-          window.location.href = role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html';
-        } else {
-          errorMessage.textContent = 'No user profile found. Please sign up.';
-          await auth.signOut();
-        }
-      } catch (error) {
-        console.error("Login error:", error);
-        errorMessage.textContent = error.message || 'An error occurred during login.';
+        await signInWithEmailAndPassword(auth, email, password);
+        const user = auth.currentUser;
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const role = userDoc.data().role;
+        window.location.href = role === "admin" ? "admin_main_dashboard.html" : "student_main_dashboard.html";
+      } catch (err) {
+        errorMessage.textContent = "Login failed: " + err.message;
       }
     });
   </script>
 </body>
-  </html>
+    </html>
