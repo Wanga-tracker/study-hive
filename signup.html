@@ -2,172 +2,171 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edu Sync Hub - Signup</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #4e54c8, #8f94fb);
+      background: linear-gradient(135deg, #6b48ff, #00ddeb);
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      margin: 0;
     }
-    .signup-container {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      width: 90%;
-      max-width: 450px;
-      padding: 30px;
-      box-sizing: border-box;
+    .container {
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
     }
     h2 {
       text-align: center;
-      color: #4e54c8;
-      margin-bottom: 20px;
+      color: #6b48ff;
     }
-    input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select {
+    input, select {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 8px 0;
       border-radius: 8px;
-      box-sizing: border-box;
+      border: 1px solid #ccc;
     }
-    label {
-      font-weight: 600;
-      color: #333;
-    }
-    .role-select {
-      display: flex;
-      justify-content: space-between;
+    .glow-button {
+      background: #6b48ff;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
       margin-top: 10px;
     }
-    .admin-password {
+    .glow-button:hover {
+      box-shadow: 0 0 12px #00ddeb;
+    }
+    .role {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .switch {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .switch a {
+      color: #6b48ff;
+      text-decoration: none;
+    }
+    #admin-pass {
       display: none;
     }
-    button {
-      width: 100%;
-      background-color: #4e54c8;
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background-color: #3b3f9e;
-    }
-    .error-message {
+    .error {
       color: red;
-      margin-top: 10px;
       text-align: center;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="signup-container">
+  <div class="container">
     <h2>Create Account</h2>
-    <input type="text" id="name" placeholder="Full Name">
-    <input type="text" id="username" placeholder="Username">
-    <input type="email" id="email" placeholder="Email">
-    <input type="tel" id="phone" placeholder="Phone Number">
-    <input type="password" id="password" placeholder="Password">
-    <input type="text" id="referral" placeholder="Referral Code (optional)">
-    <input type="text" id="county" placeholder="County">
+    <form id="signup-form">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="referral" placeholder="Referral Code (optional)">
+      <input type="text" id="county" placeholder="County" required>
 
-    <div class="role-select">
-      <label><input type="radio" name="role" value="student" checked onclick="toggleAdmin(false)"> Student</label>
-      <label><input type="radio" name="role" value="admin" onclick="toggleAdmin(true)"> Admin</label>
+      <div class="role">
+        <label><input type="radio" name="role" value="student" checked> Student</label>
+        <label><input type="radio" name="role" value="admin"> Admin</label>
+      </div>
+
+      <input type="password" id="admin-pass" placeholder="Enter Admin Access Password">
+
+      <button type="submit" class="glow-button">Sign Up</button>
+      <p class="error" id="error-message"></p>
+    </form>
+
+    <div class="switch">
+      Already have an account? <a href="login.html">Log In</a>
     </div>
-    <input type="password" id="admin-password" class="admin-password" placeholder="Admin Password">
-
-    <button onclick="signup()">Sign Up</button>
-    <div class="error-message" id="error-message"></div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-  <script>
-    // Initialize Firebase
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_MESSAGING_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyAjsxzqXwW2PcwowbFSb4jiGTHGv9rdL0w",
+      authDomain: "agent-hive-project.firebaseapp.com",
+      projectId: "agent-hive-project",
+      storageBucket: "agent-hive-project.appspot.com",
+      messagingSenderId: "464476218600",
+      appId: "1:464476218600:web:59aa5ba90c73468d78155d"
     };
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    function toggleAdmin(show) {
-      document.getElementById("admin-password").style.display = show ? "block" : "none";
-    }
+    const form = document.getElementById("signup-form");
+    const errorMsg = document.getElementById("error-message");
+    const adminInput = document.getElementById("admin-pass");
 
-    async function signup() {
-      const name = document.getElementById("name").value.trim();
-      const username = document.getElementById("username").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const password = document.getElementById("password").value;
-      const referral = document.getElementById("referral").value.trim();
-      const county = document.getElementById("county").value.trim();
-      const role = document.querySelector('input[name="role"]:checked').value;
-      const adminPassword = document.getElementById("admin-password").value.trim();
-      const errorMessage = document.getElementById("error-message");
+    document.querySelectorAll('input[name="role"]').forEach(input => {
+      input.addEventListener("change", () => {
+        adminInput.style.display = input.value === "admin" ? "block" : "none";
+      });
+    });
 
-      errorMessage.textContent = "";
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorMsg.textContent = "";
 
-      if (!name || !username || !email || !phone || !password || !county) {
-        errorMessage.textContent = "Please fill in all required fields.";
-        return;
-      }
+      const email = form.email.value;
+      const password = form.password.value;
+      const role = form.querySelector('input[name="role"]:checked').value;
+      const adminSecret = form["admin-pass"].value.trim();
+      const requiredAdminPassword = "mySecretAdminPass"; // change this to your secret
 
-      if (role === "admin" && adminPassword !== "Secret2025") {
-        errorMessage.textContent = "Incorrect admin password.";
+      if (role === "admin" && adminSecret !== requiredAdminPassword) {
+        errorMsg.textContent = "Invalid admin access password.";
         return;
       }
 
       try {
-        const snapshot = await db.collection("users").where("username", "==", username).get();
-        if (!snapshot.empty) {
-          errorMessage.textContent = "Username already exists.";
-          return;
-        }
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const uid = userCredential.user.uid;
-
-        await db.collection("users").doc(uid).set({
-          name,
-          username,
-          email,
-          phone,
-          referral,
-          county,
-          role,
+        await setDoc(doc(db, "users", user.uid), {
+          name: form.name.value,
+          username: form.username.value,
+          email: email,
+          phone: form.phone.value,
+          referral: form.referral.value,
+          county: form.county.value,
+          role: role,
           createdAt: new Date()
         });
 
-        alert("Account created successfully!");
-        window.location.href = role === "admin" ? "admin_dashboard.html" : "main_dashboard.html";
-      } catch (error) {
-        console.error(error);
-        errorMessage.textContent = error.message;
+        alert("Signup successful!");
+        if (role === "admin") {
+          window.location.href = "admin.html";
+        } else {
+          window.location.href = "dashboard.html";
+        }
+      } catch (err) {
+        errorMsg.textContent = "Signup failed: " + err.message;
       }
-    }
+    });
   </script>
 </body>
-</html>
+  </html>
