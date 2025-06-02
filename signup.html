@@ -1,130 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EduHub Kenya - Signup</title>
-  <style>
-    body {
-      background: #0D0D1F;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .container {
-      background: #1A1A3D;
-      border-radius: 12px;
-      padding: 25px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-    h2 {
-      text-align: center;
-      color: #39FF14;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #39FF14;
-      background: #0D0D1F;
-      color: #FFFFFF;
-    }
-    .glow-button {
-      background: linear-gradient(45deg, #39FF14, #D600F0);
-      color: #FFFFFF;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      width: 100%;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 10px;
-    }
-    .glow-button:hover {
-      box-shadow: 0 0 12px #D600F0;
-    }
-    .switch {
-      text-align: center;
-      margin-top: 10px;
-    }
-    .switch a {
-      color: #39FF14;
-      text-decoration: none;
-    }
-    .admin-section {
-      background: rgba(214, 0, 240, 0.2);
-      padding: 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-    }
-    .warning {
-      color: #D600F0;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      margin: 10px 0;
-    }
-    .checkbox-container input {
-      width: 24px;
-      height: 24px;
-      margin-right: 12px;
-    }
-    .checkbox-container label {
-      color: #39FF14;
-    }
-    .error {
-      color: #D600F0;
-      text-align: center;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h2>Create Account</h2>
     <form id="signup-form">
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="tel" id="phone" placeholder="Phone Number" required>
-      <input type="text" id="county" placeholder="County" required>
-      <input type="text" id="school" placeholder="School Name" required>
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="tel" id="phone" placeholder="Phone Number" required />
+      <input type="text" id="county" placeholder="County" required />
+      <input type="text" id="school" placeholder="School Name" required />
+      
       <select id="level" required>
         <option value="" disabled selected>Select Grade Level</option>
         <option value="primary">Primary</option>
         <option value="junior_high">Junior High</option>
         <option value="secondary">Secondary</option>
       </select>
-      <input type="password" id="password" placeholder="Password" required>
-      <input type="text" id="referral" placeholder="Referral Code (optional)">
+
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="text" id="referral" placeholder="Referral Code (optional)" />
+
       <div class="admin-section">
         <div class="warning">Don’t click unless verified by the developer!</div>
         <div class="checkbox-container">
-          <input type="checkbox" id="admin-request">
+          <input type="checkbox" id="admin-request" />
           <label for="admin-request">Request Admin Role</label>
         </div>
-        <input type="password" id="admin-password" placeholder="Admin Verification Password" style="display: none;">
+        <input type="password" id="admin-password" placeholder="Admin Verification Password" style="display: none;" />
       </div>
+
       <button type="submit" class="glow-button">Sign Up</button>
     </form>
-    <div class="switch">
-      Already have an account? <a href="login.html">Log In</a>
-    </div>
+
+    <div class="switch">Already have an account? <a href="login.html">Log In</a></div>
     <div id="error-message" class="error"></div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, collection, where, getDocs, query } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCs6rzjsYBPYmT1vK3VWQRU36MJgQmKJq0",
@@ -138,8 +60,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-    const ADMIN_VERIFICATION_PASSWORD = 'EduAdmin2025!'; // Replace with your secure password
+    const ADMIN_VERIFICATION_PASSWORD = 'EduAdmin2025!';
 
     const form = document.getElementById("signup-form");
     const adminRequestCheckbox = document.getElementById('admin-request');
@@ -152,6 +73,7 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const email = form.email.value;
       const password = form.password.value;
       const name = form.name.value;
@@ -165,7 +87,7 @@
       const adminPassword = form['admin-password'].value;
 
       try {
-        // Check username uniqueness
+        // Prevent duplicate usernames
         const usernameQuery = query(collection(db, 'users'), where('username', '==', username));
         const usernameSnapshot = await getDocs(usernameQuery);
         if (!usernameSnapshot.empty) {
@@ -173,7 +95,7 @@
           return;
         }
 
-        // Verify admin password
+        // Validate admin password
         if (adminRequest && adminPassword !== ADMIN_VERIFICATION_PASSWORD) {
           errorMessage.textContent = "Invalid admin verification password.";
           return;
@@ -182,11 +104,9 @@
         // Create user
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        const role = adminRequest ? 'admin' : 'student';
 
-        // Set role
-        const role = adminRequest && adminPassword === ADMIN_VERIFICATION_PASSWORD ? 'admin' : 'student';
-
-        // Save user data
+        // Save user info in Firestore
         await setDoc(doc(db, "users", user.uid), {
           name,
           username,
@@ -195,8 +115,8 @@
           county,
           school,
           level,
-          role,
           referral,
+          role,
           createdAt: new Date()
         });
 
