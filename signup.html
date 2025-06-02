@@ -3,10 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edu Sync Hub Africa - Signup</title>
+  <title>EduHub Kenya - Signup</title>
+  <style>
+    body {
+      background: #0D0D1F;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #1A1A3D;
+      border-radius: 12px;
+      padding: 25px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    h2 {
+      text-align: center;
+      color: #39FF14;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #39FF14;
+      background: #0D0D1F;
+      color: #FFFFFF;
+    }
+    .glow-button {
+      background: linear-gradient(45deg, #39FF14, #D600F0);
+      color: #FFFFFF;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 12px #D600F0;
+    }
+    .switch {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .switch a {
+      color: #39FF14;
+      text-decoration: none;
+    }
+    .admin-section {
+      background: rgba(214, 0, 240, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    .warning {
+      color: #D600F0;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .checkbox-container input {
+      width: 24px;
+      height: 24px;
+      margin-right: 12px;
+    }
+    .checkbox-container label {
+      color: #39FF14;
+    }
+    .error {
+      color: #D600F0;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <div class="auth-container">
+  <div class="container">
     <h2>Create Account</h2>
     <form id="signup-form">
       <input type="text" id="name" placeholder="Full Name" required>
@@ -21,17 +103,17 @@
         <option value="junior_high">Junior High</option>
         <option value="secondary">Secondary</option>
       </select>
-      <input type="password" id="password" placeholder="Password (6+ characters)" required>
+      <input type="password" id="password" placeholder="Password" required>
       <input type="text" id="referral" placeholder="Referral Code (optional)">
       <div class="admin-section">
-        <div class="warning">Don’t click unless you requested verification from the developer!</div>
+        <div class="warning">Don’t click unless verified by the developer!</div>
         <div class="checkbox-container">
           <input type="checkbox" id="admin-request">
           <label for="admin-request">Request Admin Role</label>
         </div>
         <input type="password" id="admin-password" placeholder="Admin Verification Password" style="display: none;">
       </div>
-      <button type="submit">Sign Up</button>
+      <button type="submit" class="glow-button">Sign Up</button>
     </form>
     <div class="switch">
       Already have an account? <a href="login.html">Log In</a>
@@ -39,136 +121,27 @@
     <div id="error-message" class="error"></div>
   </div>
 
-  <style>
-    body {
-      background: #1A1A2E;
-      color: #FFFFFF;
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .auth-container {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 30px;
-      width: 100%;
-      max-width: 450px;
-      box-shadow: 0 0 20px rgba(0, 221, 235, 0.5);
-      backdrop-filter: blur(5px);
-    }
-    h2 {
-      text-align: center;
-      background: linear-gradient(45deg, #FF007A, #00DDEB);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 2em;
-      margin-bottom: 20px;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    input, select {
-      margin: 10px 0;
-      padding: 12px;
-      border: 1px solid #00DDEB;
-      background: #1A1A2E;
-      color: #FFFFFF;
-      border-radius: 8px;
-      font-size: 1em;
-    }
-    .admin-section {
-      background: rgba(255, 0, 122, 0.2);
-      padding: 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-    }
-    .admin-section label {
-      font-size: 1.2em;
-      color: #FF007A;
-    }
-    .warning {
-      color: #FF007A;
-      font-weight: bold;
-      margin-bottom: 10px;
-      font-size: 1em;
-    }
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      margin: 10px 0;
-    }
-    .checkbox-container input {
-      width: 24px;
-      height: 24px;
-      margin-right: 12px;
-    }
-    button {
-      background: linear-gradient(45deg, #FF007A, #00DDEB);
-      border: none;
-      padding: 15px;
-      color: #FFFFFF;
-      cursor: pointer;
-      border-radius: 8px;
-      font-size: 1.1em;
-      margin-top: 10px;
-    }
-    button:hover {
-      box-shadow: 0 0 12px #00DDEB;
-    }
-    .error {
-      color: #FF007A;
-      text-align: center;
-      margin-top: 10px;
-      font-size: 0.9em;
-    }
-    .switch {
-      text-align: center;
-      margin-top: 15px;
-    }
-    .switch a {
-      color: #00DDEB;
-      text-decoration: none;
-    }
-  </style>
-
   <script type="module">
-    // Firebase SDK
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js';
-    import { getFirestore, doc, setDoc, collection, where, getDocs, query } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, collection, where, getDocs, query } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCs6rzjsYBPYmT1vK3VWQRU36MJgQmKJq0",
       authDomain: "edu-hub-kenya.firebaseapp.com",
-      databaseURL: "https://edu-hub-kenya-default-rtdb.firebaseio.com", // Added Realtime Database URL
       projectId: "edu-hub-kenya",
-      storageBucket: "edu-hub-kenya.firebasestorage.app",
+      storageBucket: "edu-hub-kenya.appspot.com",
       messagingSenderId: "163804145504",
-      appId: "1:163804145504:web:9b989b384a2bd2643f6005",
-      measurementId: "G-C8YB09R7J5"
+      appId: "1:163804145504:web:9b989b384a2bd2643f6005"
     };
 
-    // Initialize Firebase
-    let app, auth, db;
-    try {
-      app = initializeApp(firebaseConfig);
-      auth = getAuth(app);
-      db = getFirestore(app);
-      console.log("Firebase initialized successfully");
-    } catch (error) {
-      console.error("Firebase initialization error:", error);
-    }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Admin verification password
-    const ADMIN_VERIFICATION_PASSWORD = 'EduAdmin2025!'; // TODO: Replace with your secure password
+    const ADMIN_VERIFICATION_PASSWORD = 'EduAdmin2025!'; // Replace with your secure password
 
-    // Signup logic
-    const form = document.getElementById('signup-form');
+    const form = document.getElementById("signup-form");
     const adminRequestCheckbox = document.getElementById('admin-request');
     const adminPasswordField = document.getElementById('admin-password');
     const errorMessage = document.getElementById('error-message');
@@ -177,86 +150,62 @@
       adminPasswordField.style.display = adminRequestCheckbox.checked ? 'block' : 'none';
     });
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const userData = {
-        name: form.name.value.trim(),
-        username: form.username.value.trim(),
-        email: form.email.value.trim(),
-        phone: form.phone.value.trim(),
-        county: form.county.value.trim(),
-        school: form.school.value.trim(),
-        level: form.level.value,
-        password: form.password.value,
-        referral: form.referral.value.trim(),
-        adminRequest: form['admin-request'].checked,
-        adminPassword: form['admin-password'].value.trim()
-      };
-
-      if (!userData.name || !userData.username || !userData.email || !userData.phone || !userData.county || !userData.school || !userData.level) {
-        errorMessage.textContent = 'All required fields must be filled.';
-        return;
-      }
-
-      if (userData.password.length < 6) {
-        errorMessage.textContent = 'Password must be at least 6 characters.';
-        return;
-      }
-
-      if (userData.adminRequest && !userData.adminPassword) {
-        errorMessage.textContent = 'Admin verification password is required.';
-        return;
-      }
+      const email = form.email.value;
+      const password = form.password.value;
+      const name = form.name.value;
+      const username = form.username.value;
+      const phone = form.phone.value;
+      const county = form.county.value;
+      const school = form.school.value;
+      const level = form.level.value;
+      const referral = form.referral.value;
+      const adminRequest = form['admin-request'].checked;
+      const adminPassword = form['admin-password'].value;
 
       try {
         // Check username uniqueness
-        console.log("Checking username uniqueness...");
-        const usernameQuery = query(collection(db, 'users'), where('username', '==', userData.username));
+        const usernameQuery = query(collection(db, 'users'), where('username', '==', username));
         const usernameSnapshot = await getDocs(usernameQuery);
         if (!usernameSnapshot.empty) {
-          errorMessage.textContent = 'Username already exists.';
+          errorMessage.textContent = "Username already exists.";
           return;
         }
 
         // Verify admin password
-        if (userData.adminRequest && userData.adminPassword !== ADMIN_VERIFICATION_PASSWORD) {
-          errorMessage.textContent = 'Invalid admin verification password.';
+        if (adminRequest && adminPassword !== ADMIN_VERIFICATION_PASSWORD) {
+          errorMessage.textContent = "Invalid admin verification password.";
           return;
         }
 
         // Create user
-        console.log("Creating user with email:", userData.email);
-        const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log("User created:", user.uid);
 
         // Set role
-        const role = userData.adminRequest && userData.adminPassword === ADMIN_VERIFICATION_PASSWORD ? 'admin' : 'student';
+        const role = adminRequest && adminPassword === ADMIN_VERIFICATION_PASSWORD ? 'admin' : 'student';
 
         // Save user data
-        console.log("Saving user data to Firestore...");
-        await setDoc(doc(db, 'users', user.uid), {
-          name: userData.name,
-          username: userData.username,
-          email: userData.email,
-          phone: userData.phone,
-          county: userData.county,
-          school: userData.school,
-          level: userData.level,
-          role: role,
-          referral: userData.referral || '',
+        await setDoc(doc(db, "users", user.uid), {
+          name,
+          username,
+          email,
+          phone,
+          county,
+          school,
+          level,
+          role,
+          referral,
           createdAt: new Date()
         });
-        console.log("User data saved successfully");
 
         // Redirect
-        console.log("Redirecting to:", role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
-        window.location.href = role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html';
-      } catch (error) {
-        console.error("Signup error:", error);
-        errorMessage.textContent = error.message || 'An error occurred during signup.';
+        window.location.href = role === 'admin' ? "admin_main_dashboard.html" : "student_main_dashboard.html";
+      } catch (err) {
+        errorMessage.textContent = "Signup failed: " + err.message;
       }
     });
   </script>
 </body>
-  </html>
+        </html>
