@@ -10,11 +10,11 @@
     <h2>Log In</h2>
     <form id="login-form">
       <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="password" required></input>
+      <input type="password" id="password" placeholder="Password" required>
       <button type="submit">Sign In</button>
     </form>
     <div class="switch">
-      Don’t have an account? <a href="signup">Sign Up</a>
+      Don’t have an account? <a href="signup.html">Sign Up</a>
     </div>
     <div id="error-message" class="error"></div>
   </div>
@@ -55,10 +55,10 @@
       margin: 10px 0;
       padding: 12px;
       border: 1px solid #00DDEB;
-      background: none;
+      background: #1A1A2E;
       color: #FFFFFF;
       border-radius: 8px;
-      font-size: 1.1em;
+      font-size: 1em;
     }
     button {
       background: linear-gradient(45deg, #FF007A, #00DDEB);
@@ -98,7 +98,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyCs6rzjsYBPYmT1vK3VWQRU36MJgQmKJq0",
       authDomain: "edu-hub-kenya.firebaseapp.com",
-      databaseURL: "https://edu-hub-kenya-default-rtdb.firebaseio.com/", // Paste Realtime Database URL here if needed
+      databaseURL: "https://edu-hub-kenya-default-rtdb.firebaseio.com", // Added Realtime Database URL
       projectId: "edu-hub-kenya",
       storageBucket: "edu-hub-kenya.firebasestorage.app",
       messagingSenderId: "163804145504",
@@ -107,9 +107,15 @@
     };
 
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    let app, auth, db;
+    try {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      console.log("Firebase initialized successfully");
+    } catch (error) {
+      console.error("Firebase initialization error:", error);
+    }
 
     // Login logic
     const form = document.getElementById('login-form');
@@ -126,20 +132,25 @@
       }
 
       try {
+        console.log("Attempting login for email:", email);
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        console.log("User logged in:", user.uid);
 
+        console.log("Fetching user data from Firestore...");
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
         if (userDoc.exists()) {
           const role = userDoc.data().role;
+          console.log("User role:", role);
+          console.log("Redirecting to:", role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
           window.location.href = role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html';
         } else {
           errorMessage.textContent = 'No user profile found. Please sign up.';
           await auth.signOut();
         }
       } catch (error) {
-        console.error('Login error:', error);
-        errorMessage.textContent = error.message;
+        console.error("Login error:", error);
+        errorMessage.textContent = error.message || 'An error occurred during login.';
       }
     });
   </script>
