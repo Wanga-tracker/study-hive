@@ -74,23 +74,5 @@
     <!-- Extras Section -->
     <section id="extras" class="section"></section>
     </main>
-  
-    <script>
-  const toggleButton = document.querySelector('.menu-toggle');
-  const sidebar = document.querySelector('.sidebar');
-  const backdrop = document.createElement('div');
-  backdrop.className = 'backdrop';
-  document.body.appendChild(backdrop);
-
-  toggleButton.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-    backdrop.classList.toggle('show');
-  });
-
-  backdrop.addEventListener('click', () => {
-    sidebar.classList.remove('active');
-    backdrop.classList.remove('show');
-  });
-</script>
   </body>
     </html>
