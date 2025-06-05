@@ -1,5 +1,4 @@
 // facts.js
-
 export const dailyFacts = [
   "💡 Did you know that sharks existed millions of years before trees ever grew on Earth?",
   "🌍 Did you know that Africa is the only continent situated in all four hemispheres?",
